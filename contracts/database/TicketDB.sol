@@ -23,10 +23,14 @@ contract TicketDB {
     function addTicket
     (
         string calldata refNo,
-        uint256 amount
+        uint256 amount,
+        address seller
     )
     external
     {
+        // saves the address of the seller
+        commonDB.setAddress(CONTRACT_NAME_FUNDS_DB, keccak256(abi.encodePacked(refNo)), seller);
+
         // saves the amount of the ticket
         commonDB.setUint(CONTRACT_NAME_FUNDS_DB, keccak256(abi.encodePacked(refNo)), amount);
 
@@ -38,6 +42,8 @@ contract TicketDB {
     // For more info: https://github.com/karlptrck/swop-contracts-mvp/issues/1
 
     // function getTicketAmount()
+
+    // function getTicketSeller()
 
     // function updateTicketStatus()
 

@@ -1,7 +1,15 @@
 pragma solidity ^0.5.8;
 import "./EternalStorage.sol";
 
+/**
+    @title Common Eternal Storage
+    @dev Functions that update the states should only be accessible by contracts in the system
+    @author karlptrck
+ */
 contract CommonDB is EternalStorage {
+
+    // TODO add access modifiers to all setters
+    // should only be accessible by contracts in the system
 
     function setBoolean(
         string calldata contractName,

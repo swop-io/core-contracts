@@ -11,7 +11,7 @@ import "../container/Contained.sol";
 contract TicketDB is Contained {
 
     CommonDB commonDB;
-    string constant CONTRACT_NAME_FUNDS_DB = "FundsDB";
+    string constant CONTRACT_NAME_TICKET_DB = "TicketDB";
     uint256 public constant TICKET_STATE_FOR_SALE = 1;
     uint256 public constant TICKET_STATE_TRANSACTION_IN_PROGRESS = 2;
     uint256 public constant TICKET_STATE_SOLD = 3;
@@ -35,13 +35,13 @@ contract TicketDB is Contained {
     onlyContract(CONTRACT_SWOP_MANAGER)
     {
         // saves the address of the seller
-        commonDB.setAddress(CONTRACT_NAME_FUNDS_DB, keccak256(abi.encodePacked(refNo)), seller);
+        commonDB.setAddress(CONTRACT_NAME_TICKET_DB, keccak256(abi.encodePacked(refNo)), seller);
 
         // saves the amount of the ticket
-        commonDB.setUint(CONTRACT_NAME_FUNDS_DB, keccak256(abi.encodePacked(refNo)), amount);
+        commonDB.setUint(CONTRACT_NAME_TICKET_DB, keccak256(abi.encodePacked(refNo)), amount);
 
         // saves the status of the ticket
-        commonDB.setUint(CONTRACT_NAME_FUNDS_DB, keccak256(abi.encodePacked(refNo)), TICKET_STATE_FOR_SALE);
+        commonDB.setUint(CONTRACT_NAME_TICKET_DB, keccak256(abi.encodePacked(refNo)), TICKET_STATE_FOR_SALE);
     }
 
     // TODO implement below functions
@@ -53,6 +53,13 @@ contract TicketDB is Contained {
 
     // function updateTicketStatus()
 
-    // function getTicketStatus()
+    function getTicketStatus
+    (
+        string memory refNo
+    )
+    public view returns (uint256)
+    {
+        return commonDB.getUint(CONTRACT_NAME_TICKET_DB, keccak256(abi.encodePacked(refNo)));
+    }
 
 }

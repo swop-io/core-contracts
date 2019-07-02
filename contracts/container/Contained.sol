@@ -12,7 +12,7 @@ import "./ContractNames.sol";
 contract Contained is Owned, ContractNames {
     BaseContainer public container;
 
-    function setContainer(BaseContainer _container) public onlyOwner {
+    function setContainerEntry(BaseContainer _container) public onlyOwner {
         container = _container;
     }
 

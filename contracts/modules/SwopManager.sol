@@ -17,6 +17,14 @@ contract SwopManager is Contained {
     TicketDB ticketDB;
 
     /**
+        @dev Sets all the required contracts
+     */
+    function init() external onlyOwner {
+        funds = Funds(container.getContract(CONTRACT_FUNDS));
+        ticketDB = TicketDB(container.getContract(CONTRACT_TICKET_DB));
+    }
+
+    /**
         @dev Adds ticket to list of for sale
         @param refNo unique reference number
         @param amount ticket amount

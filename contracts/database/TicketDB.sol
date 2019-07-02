@@ -1,19 +1,24 @@
 pragma solidity ^0.5.8;
 
 import "./CommonDB.sol";
+import "../container/Contained.sol";
 
 /**
     @title TicketDB
     @dev Stores all ticket states and information
     @author karlptrck
  */
-contract TicketDB {
+contract TicketDB is Contained {
 
     CommonDB commonDB;
     string constant CONTRACT_NAME_FUNDS_DB = "FundsDB";
     uint256 public constant TICKET_STATE_FOR_SALE = 1;
     uint256 public constant TICKET_STATE_TRANSACTION_IN_PROGRESS = 2;
     uint256 public constant TICKET_STATE_SOLD = 3;
+
+    constructor(CommonDB _commonDB) public {
+        commonDB = _commonDB;
+    }
 
     /**
         @dev Stores the ticket details
@@ -27,6 +32,7 @@ contract TicketDB {
         address seller
     )
     external
+    onlyContract(CONTRACT_SWOP_MANAGER)
     {
         // saves the address of the seller
         commonDB.setAddress(CONTRACT_NAME_FUNDS_DB, keccak256(abi.encodePacked(refNo)), seller);

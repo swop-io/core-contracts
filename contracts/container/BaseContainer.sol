@@ -1,17 +1,14 @@
 pragma solidity ^0.5.8;
 
 import "./ContainerManager.sol";
+import "./ContractNames.sol";
 
 /**
     @title BaseContainer
     @dev Contains all getters of contract addresses in the system
     @author karlptrck
  */
-contract BaseContainer is ContainerManager {
-    string constant CONTRACT_SWOP_MANAGER = "SwopManager";
-    string constant CONTRACT_FUNDS = "Funds";
-    string constant CONTRACT_TICKET_DB = "TicketDB";
-    string constant CONTRACT_FUNDS_DB = "FundsDB";
+contract BaseContainer is ContainerManager, ContractNames {
 
     function getAddressOfSwopManager() public view returns(address) {
         return getContract(CONTRACT_SWOP_MANAGER);

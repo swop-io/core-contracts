@@ -2,13 +2,14 @@ pragma solidity ^0.5.8;
 
 import "../auth/Owned.sol";
 import "./BaseContainer.sol";
+import "./ContractNames.sol";
 
 /**
     @title Contained
     @dev Wraps the contracts and functions from unauthorized access outside the system
     @author karlptrck
  */
-contract Contained is Owned {
+contract Contained is Owned, ContractNames {
     BaseContainer public container;
 
     function setContainer(BaseContainer _container) public onlyOwner {

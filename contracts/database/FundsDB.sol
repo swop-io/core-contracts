@@ -1,18 +1,21 @@
 pragma solidity ^0.5.8;
 
 import "./CommonDB.sol";
+import "../container/Contained.sol";
 
 /**
     @title FundsDB
     @dev Stores all the fund details that are locked in the Funds contract
     @author karlptrck
  */
-contract FundsDB {
+contract FundsDB is Contained {
+
     CommonDB commonDB;
     string constant CONTRACT_NAME_FUNDS_DB = "FundsDB";
 
-    // TODO add access modifier
-    // only allowed contract can call
+    constructor(CommonDB _commonDB) public {
+        commonDB = _commonDB;
+    }
 
     /**
         @dev Stores the locked funds
@@ -27,12 +30,13 @@ contract FundsDB {
         string calldata refNo
     )
     external
+    onlyContract(CONTRACT_FUNDS)
     {
         // save the amount of locked funds
-        commonDB.setUint(CONTRACT_NAME_FUNDS_DB, keccak256(abi.encodePacked(buyer, refNo)), amount);
+        commonDB.setUint(CONTRACT_FUNDS_DB, keccak256(abi.encodePacked(buyer, refNo)), amount);
 
         // set fund status to locked
-        commonDB.setBoolean(CONTRACT_NAME_FUNDS_DB, keccak256(abi.encodePacked(buyer, refNo)), true);
+        commonDB.setBoolean(CONTRACT_FUNDS_DB, keccak256(abi.encodePacked(buyer, refNo)), true);
     }
 
     /**
@@ -46,8 +50,9 @@ contract FundsDB {
         string calldata refNo
     )
     external
+    onlyContract(CONTRACT_FUNDS)
     {
-        commonDB.setBoolean(CONTRACT_NAME_FUNDS_DB, keccak256(abi.encodePacked(buyer, refNo)), false);
+        commonDB.setBoolean(CONTRACT_FUNDS_DB, keccak256(abi.encodePacked(buyer, refNo)), false);
     }
 
     /**
@@ -63,6 +68,6 @@ contract FundsDB {
     )
     external view returns (uint256)
     {
-        return commonDB.getUint(CONTRACT_NAME_FUNDS_DB, keccak256(abi.encodePacked(buyer, refNo)));
+        return commonDB.getUint(CONTRACT_FUNDS_DB, keccak256(abi.encodePacked(buyer, refNo)));
     }
 }

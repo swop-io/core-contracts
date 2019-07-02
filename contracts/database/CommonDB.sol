@@ -1,15 +1,13 @@
 pragma solidity ^0.5.8;
 import "./EternalStorage.sol";
+import "../container/Contained.sol";
 
 /**
     @title Common Eternal Storage
     @dev Functions that update the states should only be accessible by contracts in the system
     @author karlptrck
  */
-contract CommonDB is EternalStorage {
-
-    // TODO add access modifiers to all setters
-    // should only be accessible by contracts in the system
+contract CommonDB is EternalStorage, Contained {
 
     function setBoolean(
         string calldata contractName,
@@ -17,6 +15,7 @@ contract CommonDB is EternalStorage {
         bool value
     )
     external
+    onlyContract(contractName)
     {
         _bool[keccak256(abi.encodePacked(contractName, key))] = value;
     }
@@ -36,6 +35,7 @@ contract CommonDB is EternalStorage {
         int value
     )
     external
+    onlyContract(contractName)
     {
         _int[keccak256(abi.encodePacked(contractName, key))] = value;
     }
@@ -55,6 +55,7 @@ contract CommonDB is EternalStorage {
         uint256 value
     )
     external
+    onlyContract(contractName)
     {
         _uint[keccak256(abi.encodePacked(contractName, key))] = value;
     }
@@ -74,6 +75,7 @@ contract CommonDB is EternalStorage {
         address value
     )
     external
+    onlyContract(contractName)
     {
         _address[keccak256(abi.encodePacked(contractName, key))] = value;
     }
@@ -93,6 +95,7 @@ contract CommonDB is EternalStorage {
         string calldata value
     )
     external
+    onlyContract(contractName)
     {
         _string[keccak256(abi.encodePacked(contractName, key))] = value;
     }
@@ -112,6 +115,7 @@ contract CommonDB is EternalStorage {
         bytes calldata value
     )
     external
+    onlyContract(contractName)
     {
         _bytes[keccak256(abi.encodePacked(contractName, key))] = value;
     }

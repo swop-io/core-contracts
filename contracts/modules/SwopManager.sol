@@ -2,13 +2,14 @@ pragma solidity ^0.5.8;
 
 import "../database/TicketDB.sol";
 import "./Funds.sol";
+import "../container/Contained.sol";
 
 /**
     @title SwopManager
     @dev Manages all ticket states and transactions
     @author karlptrck
  */
-contract SwopManager {
+contract SwopManager is Contained {
     event TicketPosted(string refNo, uint256 amount, address seller);
     event FundsLocked(string refNo, address buyer);
 
@@ -27,7 +28,8 @@ contract SwopManager {
         uint256 amount,
         address seller
     )
-    external
+    external 
+    onlyContained
     {
         ticketDB.addTicket(refNo, amount, seller);
         emit TicketPosted(refNo, amount, seller);
@@ -44,6 +46,7 @@ contract SwopManager {
         address buyer
     )
     external payable
+    onlyContained
     {
         // TODO implement these
         // uint256 amount = ticketDB.getTicketAmount(refNo);
@@ -63,6 +66,7 @@ contract SwopManager {
         string calldata refNo
     )
     external
+    onlyContained
     {
         // TODO compute the amount disbursment to airline and seller
         
@@ -70,4 +74,5 @@ contract SwopManager {
         // funds.disburse(refNo);
 
     }
+
 }

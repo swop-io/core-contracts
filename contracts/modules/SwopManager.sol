@@ -56,15 +56,14 @@ contract SwopManager is Contained {
     external payable
     onlyContained
     {
-        // TODO implement these
-        // uint256 amount = ticketDB.getTicketAmount(refNo);
-        // require(amount == msg.value, "Invalid amount");
+        uint256 amount = ticketDB.getTicketAmount(refNo);
+        require(amount == msg.value, "Invalid amount");
 
-        // lock funds to Funds contract
-        // funds.lockFunds(); not yet implemented
+        //lock funds to Funds contract
+        funds.lockFunds();
 
-        // update ticket status to IN_PROGRESS
-        // ticketDB.updateTicketStatus(IN_PROGRESS);
+        //update ticket status to IN_PROGRESS
+        ticketDB.updateTicketStatus(IN_PROGRESS);
 
         emit FundsLocked(refNo, buyer);
     }

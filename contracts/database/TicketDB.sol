@@ -48,10 +48,13 @@ contract TicketDB is Contained {
     // For more info: https://github.com/karlptrck/swop-contracts-mvp/issues/1
 
     // function getTicketAmount()
+    commonDB.getUint(CONTRACT_NAME_TICKET_DB, keccak256(abi.encodePacked(refNo)), amount);
 
     // function getTicketSeller()
+    commonDB.getAddress(CONTRACT_NAME_TICKET_DB, keccak256(abi.encodePacked(refNo)), seller);
 
     // function updateTicketStatus()
+
 
     function getTicketStatus
     (

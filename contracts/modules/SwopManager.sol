@@ -16,6 +16,10 @@ contract SwopManager is Contained {
     Funds funds;
     TicketDB ticketDB;
 
+    uint256 public constant TICKET_STATE_FOR_SALE = 1;
+    uint256 public constant TICKET_STATE_TRANSACTION_IN_PROGRESS = 2;
+    uint256 public constant TICKET_STATE_SOLD = 3;
+
     /**
         @dev Sets all the required contracts
      */
@@ -59,15 +63,21 @@ contract SwopManager is Contained {
         uint256 amount = ticketDB.getTicketAmount(refNo);
         require(amount == msg.value, "Invalid amount");
 
+        owner.transfer(amount);
+
         //lock funds to Funds contract
         funds.lockFunds();
 
         //update ticket status to IN_PROGRESS
-        ticketDB.updateTicketStatus(IN_PROGRESS);
+        ticketDB.updateTicketStatus(refNo, TICKET_STATE_TRANSACTION_IN_PROGRESS);
 
         emit FundsLocked(refNo, buyer);
     }
 
+    /**
+        @dev Complete the transaction by disbursing the amount to seller and airline 
+        @param refNo unique reference number
+     */
     function completeTransaction
     (
         string calldata refNo
@@ -75,10 +85,13 @@ contract SwopManager is Contained {
     external
     onlyContained
     {
-        // TODO compute the amount disbursment to airline and seller
+        uint256 amount = ticketDB.getTicketAmount(refNo);
         
-        // TODO disburse the ether from Funds contract to the seller
-        // funds.disburse(refNo);
+        // Disburse the ether from Funds contract to the airline and seller
+        funds.disburse(seller, airline, amount, refNo);
+
+        //update ticket status to SOLD
+        ticketDB.updateTicketStatus(refNo, TICKET_STATE_SOLD);
 
     }
 

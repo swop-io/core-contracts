@@ -38,23 +38,59 @@ contract TicketDB is Contained {
         commonDB.setAddress(CONTRACT_NAME_TICKET_DB, keccak256(abi.encodePacked(refNo)), seller);
 
         // saves the amount of the ticket
-        commonDB.setUint(CONTRACT_NAME_TICKET_DB, keccak256(abi.encodePacked(refNo)), amount);
+        commonDB.setUint(CONTRACT_NAME_TICKET_DB, keccak256(abi.encodePacked(refNo, 'amount')), amount);
 
         // saves the status of the ticket
-        commonDB.setUint(CONTRACT_NAME_TICKET_DB, keccak256(abi.encodePacked(refNo)), TICKET_STATE_FOR_SALE);
+        commonDB.setUint(CONTRACT_NAME_TICKET_DB, keccak256(abi.encodePacked(refNo, 'state')), TICKET_STATE_FOR_SALE);
     }
 
-    // TODO implement below functions
     // For more info: https://github.com/karlptrck/swop-contracts-mvp/issues/1
 
-    // function getTicketAmount()
-    commonDB.getUint(CONTRACT_NAME_TICKET_DB, keccak256(abi.encodePacked(refNo)), amount);
+    /**
+        @dev Get the ticket amount
+        @param refNo unique reference number
+     */
+    function getTicketAmount
+    (
+        string memory refNo
+    )
+    public view returns (uint256)
+    onlyContract(CONTRACT_SWOP_MANAGER)
+    {
+        return commonDB.getUint(CONTRACT_NAME_TICKET_DB, keccak256(abi.encodePacked(refNo, 'amount')));
+    }
 
     // function getTicketSeller()
-    commonDB.getAddress(CONTRACT_NAME_TICKET_DB, keccak256(abi.encodePacked(refNo)), seller);
+    /**
+        @dev Get the ticket seller
+        @param refNo unique reference number
+     */
+    function getTicketSeller
+    (
+        string memory refNo,
+    )
+    public view returns (address)
+    onlyContract(CONTRACT_SWOP_MANAGER)
+    {
+        return commonDB.getAddress(CONTRACT_NAME_TICKET_DB, keccak256(abi.encodePacked(refNo)));
+    }
 
     // function updateTicketStatus()
-
+    /**
+        @dev UpdateTicketStatus
+        @param refNo unique reference number
+        @param value Ticket status
+     */
+    function updateTicketStatus
+    (
+        string memory refNo,
+        string calldata value
+    )
+    external
+    onlyContract(CONTRACT_SWOP_MANAGER)
+    {
+        commonDB.setUint(CONTRACT_NAME_TICKET_DB, keccak256(abi.encodePacked(refNo, 'state')), value);
+    }
 
     function getTicketStatus
     (
@@ -62,7 +98,7 @@ contract TicketDB is Contained {
     )
     public view returns (uint256)
     {
-        return commonDB.getUint(CONTRACT_NAME_TICKET_DB, keccak256(abi.encodePacked(refNo)));
+        return commonDB.getUint(CONTRACT_NAME_TICKET_DB, keccak256(abi.encodePacked(refNo, 'state')));
     }
 
 }

@@ -1,23 +1,23 @@
 pragma solidity ^0.5.8;
 
-import "./Funds.sol";
+import "../database/FundsDB.sol";
 import "../container/Contained.sol";
 
 contract Funds is Contained {
 
-    event DisburseSeller(string refNo, address seller, amount);
-    event DisburseAirline(string refNo, address airline, amount);
+    event DisburseSeller(string refNo, address seller, uint256 amount);
+    event DisburseAirline(string refNo, address airline, uint256 amount);
 
-    Funds funds;
+    FundsDB fundsDB;
 
-    CommonDB commonDB;
+    //CommonDB commonDB;
     uint constant SWOP_FEE = 150000000000000000;
 
     /**
         @dev Sets all the required contracts
      */
     function init() external onlyOwner {
-        funds = Funds(container.getContract(CONTRACT_FUNDS));
+        fundsDB = FundsDB(container.getContract(CONTRACT_FUNDS_DB));
     }
 
     /**
@@ -36,18 +36,21 @@ contract Funds is Contained {
     onlyContained
     {
         owner.transfer(amount);
-        funds.addLockedFunds(buyer, amount, refNo);
+        fundsDB.addLockedFunds(buyer, amount, refNo);
     }
 
     /**
      @dev Disburse the fund from the contract to seller and airline
      @param buyer address of the buyer
+     @param seller address of the seller
+     @param airline address of the airline
      @param refNo unique reference number
      */
     function disburse
     (
-        address seller,
-        address airline,
+        address buyer,
+        address payable seller,
+        address payable airline,
         uint256 amount,
         string calldata refNo
     )
@@ -55,7 +58,7 @@ contract Funds is Contained {
     onlyContained
     {
         //Deduct transaction fee 
-        amountLessFee = amount - SWOP_FEE;
+        uint256 amountLessFee = amount - SWOP_FEE;
 
         seller.transfer(amountLessFee);
         emit DisburseSeller(refNo, seller, amountLessFee);
@@ -63,6 +66,6 @@ contract Funds is Contained {
         airline.transfer(SWOP_FEE);
         emit DisburseSeller(refNo, airline, SWOP_FEE);
 
-        funds.releaseLockedFunds(buyer, refNo);
+        fundsDB.releaseLockedFunds(buyer, refNo);
     }
 }

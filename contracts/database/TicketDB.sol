@@ -54,8 +54,9 @@ contract TicketDB is Contained {
     (
         string memory refNo
     )
-    public view returns (uint256)
+    public view 
     onlyContract(CONTRACT_SWOP_MANAGER)
+    returns (uint256)
     {
         return commonDB.getUint(CONTRACT_NAME_TICKET_DB, keccak256(abi.encodePacked(refNo, 'amount')));
     }
@@ -67,12 +68,29 @@ contract TicketDB is Contained {
      */
     function getTicketSeller
     (
-        string memory refNo,
+        string memory refNo
     )
-    public view returns (address)
+    public view
     onlyContract(CONTRACT_SWOP_MANAGER)
+    returns (address)
     {
         return commonDB.getAddress(CONTRACT_NAME_TICKET_DB, keccak256(abi.encodePacked(refNo)));
+    }
+
+    // function updateTicketBuyer()
+    /**
+        @dev UpdateTicketBuyer
+        @param refNo unique reference number
+     */
+    function updateTicketBuyer
+    (
+        string calldata refNo,
+        address value
+    )
+    external
+    onlyContract(CONTRACT_SWOP_MANAGER)
+    {
+        commonDB.setAddress(CONTRACT_NAME_TICKET_DB, keccak256(abi.encodePacked(refNo, 'buyer')), value);
     }
 
     // function updateTicketStatus()
@@ -83,8 +101,8 @@ contract TicketDB is Contained {
      */
     function updateTicketStatus
     (
-        string memory refNo,
-        string calldata value
+        string calldata refNo,
+        uint256 value
     )
     external
     onlyContract(CONTRACT_SWOP_MANAGER)
@@ -99,6 +117,15 @@ contract TicketDB is Contained {
     public view returns (uint256)
     {
         return commonDB.getUint(CONTRACT_NAME_TICKET_DB, keccak256(abi.encodePacked(refNo, 'state')));
+    }
+
+    function getTicketBuyer
+    (
+        string memory refNo
+    )
+    public view returns (address)
+    {
+        return commonDB.getAddress(CONTRACT_NAME_TICKET_DB, keccak256(abi.encodePacked(refNo, 'buyer')));
     }
 
 }

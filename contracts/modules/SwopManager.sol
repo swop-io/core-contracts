@@ -19,6 +19,8 @@ contract SwopManager is Contained {
     uint256 public constant TICKET_STATE_FOR_SALE = 1;
     uint256 public constant TICKET_STATE_TRANSACTION_IN_PROGRESS = 2;
     uint256 public constant TICKET_STATE_SOLD = 3;
+    //address public airline = 0x1df62f291b2e969fb0849d99d9ce41e2f137006e;
+    address payable public airline = msg.sender;
 
     /**
         @dev Sets all the required contracts
@@ -66,7 +68,10 @@ contract SwopManager is Contained {
         owner.transfer(amount);
 
         //lock funds to Funds contract
-        funds.lockFunds();
+        funds.lockFunds(buyer, amount, refNo);
+
+        //update ticket buyer
+        ticketDB.updateTicketBuyer(refNo, msg.sender);
 
         //update ticket status to IN_PROGRESS
         ticketDB.updateTicketStatus(refNo, TICKET_STATE_TRANSACTION_IN_PROGRESS);
@@ -86,9 +91,11 @@ contract SwopManager is Contained {
     onlyContained
     {
         uint256 amount = ticketDB.getTicketAmount(refNo);
+        address payable seller = ticketDB.getTicketSeller(refNo);
+        address buyer = ticketDB.getTicketBuyer(refNo);
         
         // Disburse the ether from Funds contract to the airline and seller
-        funds.disburse(seller, airline, amount, refNo);
+        funds.disburse(buyer, seller, airline, amount, refNo);
 
         //update ticket status to SOLD
         ticketDB.updateTicketStatus(refNo, TICKET_STATE_SOLD);

@@ -80,6 +80,17 @@ contract CommonDB is EternalStorage, Contained {
         _address[keccak256(abi.encodePacked(contractName, key))] = value;
     }
 
+    function setAddressPayable(
+        string calldata contractName,
+        bytes32 key,
+        address payable value
+    )
+    external
+    onlyContract(contractName)
+    {
+        _address[keccak256(abi.encodePacked(contractName, key))] = value;
+    }
+
     function getAddress(
         string memory contractName,
         bytes32 key

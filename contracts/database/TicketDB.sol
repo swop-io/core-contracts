@@ -29,13 +29,13 @@ contract TicketDB is Contained {
     (
         string calldata refNo,
         uint256 amount,
-        address seller
+        address payable seller
     )
     external
     onlyContract(CONTRACT_SWOP_MANAGER)
     {
         // saves the address of the seller
-        commonDB.setAddress(CONTRACT_NAME_TICKET_DB, keccak256(abi.encodePacked(refNo)), seller);
+        commonDB.setAddressPayable(CONTRACT_NAME_TICKET_DB, keccak256(abi.encodePacked(refNo)), seller);
 
         // saves the amount of the ticket
         commonDB.setUint(CONTRACT_NAME_TICKET_DB, keccak256(abi.encodePacked(refNo, 'amount')), amount);

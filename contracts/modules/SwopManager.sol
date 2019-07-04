@@ -40,7 +40,7 @@ contract SwopManager is Contained {
     (
         string calldata refNo,
         uint256 amount,
-        address seller
+        address payable seller
     )
     external 
     onlyContained
@@ -91,11 +91,12 @@ contract SwopManager is Contained {
     onlyContained
     {
         uint256 amount = ticketDB.getTicketAmount(refNo);
-        address payable seller = ticketDB.getTicketSeller(refNo);
+        //address seller = ticketDB.getTicketSeller(refNo);
         address buyer = ticketDB.getTicketBuyer(refNo);
         
         // Disburse the ether from Funds contract to the airline and seller
-        funds.disburse(buyer, seller, airline, amount, refNo);
+        //funds.disburse(buyer, seller, airline, amount, refNo);
+        funds.disburse(buyer, airline, amount, refNo);
 
         //update ticket status to SOLD
         ticketDB.updateTicketStatus(refNo, TICKET_STATE_SOLD);

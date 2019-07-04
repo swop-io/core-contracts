@@ -42,14 +42,13 @@ contract Funds is Contained {
     /**
      @dev Disburse the fund from the contract to seller and airline
      @param buyer address of the buyer
-     @param seller address of the seller
      @param airline address of the airline
      @param refNo unique reference number
      */
     function disburse
     (
         address buyer,
-        address payable seller,
+        //address payable seller,
         address payable airline,
         uint256 amount,
         string calldata refNo
@@ -60,11 +59,11 @@ contract Funds is Contained {
         //Deduct transaction fee 
         uint256 amountLessFee = amount - SWOP_FEE;
 
-        seller.transfer(amountLessFee);
-        emit DisburseSeller(refNo, seller, amountLessFee);
+        //seller.transfer(amountLessFee);
+        //emit DisburseSeller(refNo, seller, amountLessFee);
 
         airline.transfer(SWOP_FEE);
-        emit DisburseSeller(refNo, airline, SWOP_FEE);
+        emit DisburseAirline(refNo, airline, SWOP_FEE);
 
         fundsDB.releaseLockedFunds(buyer, refNo);
     }

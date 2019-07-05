@@ -19,8 +19,7 @@ contract SwopManager is Contained {
     uint256 public constant TICKET_STATE_FOR_SALE = 1;
     uint256 public constant TICKET_STATE_TRANSACTION_IN_PROGRESS = 2;
     uint256 public constant TICKET_STATE_SOLD = 3;
-    //address public airline = 0x1df62f291b2e969fb0849d99d9ce41e2f137006e;
-    address payable public airline = msg.sender;
+    address public receiver;
 
     /**
         @dev Sets all the required contracts
@@ -28,6 +27,13 @@ contract SwopManager is Contained {
     function init() external onlyOwner {
         funds = Funds(container.getContract(CONTRACT_FUNDS));
         ticketDB = TicketDB(container.getContract(CONTRACT_TICKET_DB));
+    }
+
+    function setReceiverAddress(address _receiver)
+    external
+    onlyOwner
+    {
+        receiver = _receiver;
     }
 
     /**
@@ -65,13 +71,11 @@ contract SwopManager is Contained {
         uint256 amount = ticketDB.getTicketAmount(refNo);
         require(amount == msg.value, "Invalid amount");
 
-        owner.transfer(amount);
-
         //lock funds to Funds contract
-        funds.lockFunds(buyer, amount, refNo);
+        funds.lockFunds.value(msg.value)(buyer, amount, refNo);
 
-        //update ticket buyer
-        ticketDB.updateTicketBuyer(refNo, msg.sender);
+        //sets ticket buyer
+        ticketDB.setTicketBuyer(refNo, buyer);
 
         //update ticket status to IN_PROGRESS
         ticketDB.updateTicketStatus(refNo, TICKET_STATE_TRANSACTION_IN_PROGRESS);
@@ -90,13 +94,13 @@ contract SwopManager is Contained {
     external
     onlyContained
     {
+        require(receiver != address(0), 'Airline Receiver Address is empty');
         uint256 amount = ticketDB.getTicketAmount(refNo);
-        //address seller = ticketDB.getTicketSeller(refNo);
+        address seller = ticketDB.getTicketSeller(refNo);
         address buyer = ticketDB.getTicketBuyer(refNo);
-        
+
         // Disburse the ether from Funds contract to the airline and seller
-        //funds.disburse(buyer, seller, airline, amount, refNo);
-        funds.disburse(buyer, airline, amount, refNo);
+        funds.disburse(buyer, seller, receiver, amount, refNo);
 
         //update ticket status to SOLD
         ticketDB.updateTicketStatus(refNo, TICKET_STATE_SOLD);

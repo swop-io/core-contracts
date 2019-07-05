@@ -27,7 +27,7 @@ contract PublicEntry is BaseContainer, Guard {
     )
     external payable
     {
-        SwopManager(getAddressOfSwopManager()).buyTicket(refNo, msg.sender);
+        SwopManager(getAddressOfSwopManager()).buyTicket.value(msg.value)(refNo, msg.sender);
     }
 
     function completeTransaction

@@ -10,8 +10,8 @@ contract Funds is Contained {
 
     FundsDB fundsDB;
 
-    //CommonDB commonDB;
-    uint constant SWOP_FEE = 150000000000000000;
+    // .15 ETH = $50
+    uint256 constant REBOOKING_FEE = 150000;
 
     /**
         @dev Sets all the required contracts
@@ -33,9 +33,8 @@ contract Funds is Contained {
         string calldata refNo
     )
     external payable
-    onlyContained
+    // onlyContained
     {
-        owner.transfer(amount);
         fundsDB.addLockedFunds(buyer, amount, refNo);
     }
 
@@ -48,22 +47,25 @@ contract Funds is Contained {
     function disburse
     (
         address buyer,
-        //address payable seller,
-        address payable airline,
+        address seller,
+        address airline,
         uint256 amount,
         string calldata refNo
     )
-    external payable
-    onlyContained
+    external
+    // onlyContained
     {
-        //Deduct transaction fee 
-        uint256 amountLessFee = amount - SWOP_FEE;
 
-        //seller.transfer(amountLessFee);
-        //emit DisburseSeller(refNo, seller, amountLessFee);
+        // TODO use safemath here
+        uint256 amountLessFee = amount - REBOOKING_FEE;
 
-        airline.transfer(SWOP_FEE);
-        emit DisburseAirline(refNo, airline, SWOP_FEE);
+        address payable newSeller = address(uint160(seller));
+        newSeller.transfer(amountLessFee);
+        emit DisburseSeller(refNo, seller, amountLessFee);
+
+        address payable airlineReceiver = address(uint160(airline));
+        airlineReceiver.transfer(REBOOKING_FEE);
+        emit DisburseAirline(refNo, airlineReceiver, REBOOKING_FEE);
 
         fundsDB.releaseLockedFunds(buyer, refNo);
     }

@@ -10,7 +10,7 @@ import "../container/Contained.sol";
     @author karlptrck
  */
 contract SwopManager is Contained {
-    event TicketPosted(string refNo, uint256 amount, address seller);
+    event TicketPosted(string refNo, uint256 amount, address seller, bool forDirectBuy);
     event FundsLocked(string refNo, address buyer);
 
     Funds funds;
@@ -41,18 +41,20 @@ contract SwopManager is Contained {
         @param refNo unique reference number
         @param amount ticket amount
         @param seller address of the seller
+        @param forDirectBuy option to set pre-defined buyer
      */
     function postTicket
     (
         string calldata refNo,
         uint256 amount,
-        address payable seller
+        address payable seller,
+        bool forDirectBuy
     )
-    external 
+    external
     onlyContained
     {
-        ticketDB.addTicket(refNo, amount, seller);
-        emit TicketPosted(refNo, amount, seller);
+        ticketDB.addTicket(refNo, amount, seller, forDirectBuy);
+        emit TicketPosted(refNo, amount, seller, forDirectBuy);
     }
 
     /**
@@ -60,24 +62,15 @@ contract SwopManager is Contained {
         @param refNo unique reference number
         @param buyer address of the buyer
      */
-    function buyTicket
-    (
-        string calldata refNo,
-        address buyer
-    )
-    external payable
+    function buyTicket(string memory refNo, address buyer)
+    public payable
     onlyContained
     {
         uint256 amount = ticketDB.getTicketAmount(refNo);
         require(amount == msg.value, "Invalid amount");
 
-        //lock funds to Funds contract
         funds.lockFunds.value(msg.value)(buyer, amount, refNo);
-
-        //sets ticket buyer
         ticketDB.setTicketBuyer(refNo, buyer);
-
-        //update ticket status to IN_PROGRESS
         ticketDB.updateTicketStatus(refNo, TICKET_STATE_TRANSACTION_IN_PROGRESS);
 
         emit FundsLocked(refNo, buyer);
@@ -87,10 +80,7 @@ contract SwopManager is Contained {
         @dev Complete the transaction by disbursing the amount to seller and airline 
         @param refNo unique reference number
      */
-    function completeTransaction
-    (
-        string calldata refNo
-    )
+    function completeTransaction(string calldata refNo)
     external
     onlyContained
     {
@@ -102,9 +92,40 @@ contract SwopManager is Contained {
         // Disburse the ether from Funds contract to the airline and seller
         funds.disburse(buyer, seller, receiver, amount, refNo);
 
-        //update ticket status to SOLD
         ticketDB.updateTicketStatus(refNo, TICKET_STATE_SOLD);
 
+    }
+
+    /**
+        @dev Enables seller to pre-defined the buyer
+        @param refNo unique reference number
+        @param buyer address of the buyer
+        @param r signature part
+        @param s signature part
+        @param v signature part
+     */
+    function directBuy
+    (
+        string calldata refNo,
+        address buyer,
+        bytes32 r,
+        bytes32 s,
+        uint8 v
+    )
+    external
+    payable
+    onlyContained
+    {
+        bytes32 messageHash = keccak256(abi.encodePacked(refNo, buyer));
+
+        bytes32 messageHash2 = keccak256(abi.encodePacked(
+            "\x19Ethereum Signed Message:\n32", messageHash
+        ));
+
+        address seller = ticketDB.getTicketSeller(refNo);
+        require(ecrecover(messageHash2, v, r, s) == seller, "bad signature");
+
+        this.buyTicket.value(msg.value)(refNo, buyer);
     }
 
 }

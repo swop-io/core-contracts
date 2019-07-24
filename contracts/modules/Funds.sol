@@ -2,9 +2,10 @@ pragma solidity ^0.5.8;
 
 import "../database/FundsDB.sol";
 import "../container/Contained.sol";
+import "../lib/SafeMath.sol";
 
 contract Funds is Contained {
-
+    using SafeMath for uint256;
     event DisburseSeller(string refNo, address seller, uint256 amount);
     event DisburseAirline(string refNo, address airline, uint256 amount);
 
@@ -33,7 +34,7 @@ contract Funds is Contained {
         string calldata refNo
     )
     external payable
-    // onlyContained
+    onlyContract(CONTRACT_SWOP_MANAGER)
     {
         fundsDB.addLockedFunds(buyer, amount, refNo);
     }
@@ -53,11 +54,10 @@ contract Funds is Contained {
         string calldata refNo
     )
     external
-    // onlyContained
+    onlyContract(CONTRACT_SWOP_MANAGER)
     {
 
-        // TODO use safemath here
-        uint256 amountLessFee = amount - REBOOKING_FEE;
+        uint256 amountLessFee = amount.sub(REBOOKING_FEE);
 
         address payable newSeller = address(uint160(seller));
         newSeller.transfer(amountLessFee);

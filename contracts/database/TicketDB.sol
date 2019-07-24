@@ -29,51 +29,34 @@ contract TicketDB is Contained {
     (
         string calldata refNo,
         uint256 amount,
-        address payable seller
+        address payable seller,
+        bool forDirectBuy
     )
     external
     onlyContract(CONTRACT_SWOP_MANAGER)
     {
-        // saves the address of the seller
+
         commonDB.setAddressPayable(CONTRACT_NAME_TICKET_DB, keccak256(abi.encodePacked(refNo)), seller);
-
-        // saves the amount of the ticket
         commonDB.setUint(CONTRACT_NAME_TICKET_DB, keccak256(abi.encodePacked(refNo, 'amount')), amount);
-
-        // saves the status of the ticket
         commonDB.setUint(CONTRACT_NAME_TICKET_DB, keccak256(abi.encodePacked(refNo, 'state')), TICKET_STATE_FOR_SALE);
+        commonDB.setBoolean(CONTRACT_NAME_TICKET_DB, keccak256(abi.encodePacked(refNo, 'forDirectBuy')), forDirectBuy);
     }
-
-    // For more info: https://github.com/karlptrck/swop-contracts-mvp/issues/1
 
     /**
         @dev Get the ticket amount
         @param refNo unique reference number
      */
-    function getTicketAmount
-    (
-        string memory refNo
-    )
-    public view
-    onlyContract(CONTRACT_SWOP_MANAGER)
-    returns (uint256)
-    {
+    function getTicketAmount(string calldata refNo) external view onlyContract(CONTRACT_SWOP_MANAGER)
+    returns (uint256) {
         return commonDB.getUint(CONTRACT_NAME_TICKET_DB, keccak256(abi.encodePacked(refNo, 'amount')));
     }
 
-    // function getTicketSeller()
     /**
         @dev Get the ticket seller
         @param refNo unique reference number
      */
-    function getTicketSeller
-    (
-        string memory refNo
-    )
-    public view
-    onlyContract(CONTRACT_SWOP_MANAGER)
-    returns (address)
-    {
+    function getTicketSeller(string calldata refNo) external view onlyContract(CONTRACT_SWOP_MANAGER)
+    returns (address) {
         return commonDB.getAddress(CONTRACT_NAME_TICKET_DB, keccak256(abi.encodePacked(refNo)));
     }
 
@@ -81,14 +64,7 @@ contract TicketDB is Contained {
         @dev Set Ticket Buyer
         @param refNo unique reference number
      */
-    function setTicketBuyer
-    (
-        string calldata refNo,
-        address buyer
-    )
-    external
-    onlyContract(CONTRACT_SWOP_MANAGER)
-    {
+    function setTicketBuyer(string calldata refNo, address buyer) external onlyContract(CONTRACT_SWOP_MANAGER) {
         commonDB.setAddress(CONTRACT_NAME_TICKET_DB, keccak256(abi.encodePacked(refNo, 'buyer')), buyer);
     }
 
@@ -97,32 +73,15 @@ contract TicketDB is Contained {
         @param refNo unique reference number
         @param value Ticket status
      */
-    function updateTicketStatus
-    (
-        string calldata refNo,
-        uint256 value
-    )
-    external
-    onlyContract(CONTRACT_SWOP_MANAGER)
-    {
+    function updateTicketStatus(string calldata refNo, uint256 value) external onlyContract(CONTRACT_SWOP_MANAGER) {
         commonDB.setUint(CONTRACT_NAME_TICKET_DB, keccak256(abi.encodePacked(refNo, 'state')), value);
     }
 
-    function getTicketStatus
-    (
-        string memory refNo
-    )
-    public view returns (uint256)
-    {
+    function getTicketStatus(string calldata refNo) external view returns (uint256) {
         return commonDB.getUint(CONTRACT_NAME_TICKET_DB, keccak256(abi.encodePacked(refNo, 'state')));
     }
 
-    function getTicketBuyer
-    (
-        string memory refNo
-    )
-    public view returns (address)
-    {
+    function getTicketBuyer(string calldata refNo) external view returns (address) {
         return commonDB.getAddress(CONTRACT_NAME_TICKET_DB, keccak256(abi.encodePacked(refNo, 'buyer')));
     }
 

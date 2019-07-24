@@ -26,14 +26,13 @@ contract PublicEntry is BaseContainer, Guard {
     function directBuy
     (
         string calldata refNo,
-        address buyer,
         bytes32 r,
         bytes32 s,
         uint8 v
     )
     external payable
     {
-        SwopManager(getAddressOfSwopManager()).directBuy.value(msg.value)(refNo, buyer, r, s, v);
+        SwopManager(getAddressOfSwopManager()).directBuy.value(msg.value)(refNo, msg.sender, r, s, v);
     }
 
 }

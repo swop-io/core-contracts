@@ -20,7 +20,8 @@ contract AuctionsDB is Contained {
         uint256 depositAmount,
         address bidder,
     ) 
-    external 
+    external
+    onlyContract(CONTRACT_AUCTIONS)
     {
         
         if(!isBidder(refNo, bidder)){
@@ -32,25 +33,42 @@ contract AuctionsDB is Contained {
         }
     }
 
-    function isBidder
-    (
-        string calldata refNo, 
-        address bidder
-    ) 
-    public 
-    view returns(bool)
-    {
-        return commonDB.getAddress(CONTRACT_NAME_AUCTION_DB, keccak256(abi.encodePacked(refNo))) == address(0) ? false : true;
-    }
-
-    function getDepositedAmount
+    function removeDeposit
     (
         string calldata refNo,
         address bidder
-    )
-    public
-    view returns(uint256)
+    ) 
+    external 
+    onlyContract(CONTRACT_AUCTIONS)
     {
-        commonDB.getUint(CONTRACT_NAME_AUCTION_DB, keccak256(abi.encodePacked(refNo, 'depositAmount')));
+         commonDB.setUint(CONTRACT_NAME_AUCTION_DB, keccak256(abi.encodePacked(refNo, 'depositAmount')), 0);
     }
+
+    function updateAuctionState
+    (
+        string calldata refNo,
+        uint8 state
+    ) 
+    external 
+    onlyContract(CONTRACT_AUCTIONS)
+    {
+         commonDB.setUint(CONTRACT_NAME_AUCTION_DB, keccak256(abi.encodePacked(refNo, 'state')), state);
+    }
+
+    // GETTERS
+    function isBidder(string calldata refNo, address bidder) public view
+    returns(bool){
+        return commonDB.getAddress(CONTRACT_NAME_AUCTION_DB, keccak256(abi.encodePacked(refNo))) == address(0) ? false : true;
+    }
+
+    function getDepositedAmount(string calldata refNo, address bidder) public view 
+    returns(uint256){
+        return commonDB.getUint(CONTRACT_NAME_AUCTION_DB, keccak256(abi.encodePacked(refNo, 'depositAmount')));
+    }
+
+    function getAuctionState(string calldata refNo) external view 
+    returns(uint8){
+        retturn commonDB.getUint(CONTRACT_NAME_AUCTION_DB, keccak256(abi.encodePacked(refNo, 'state')));
+    }
+
 }

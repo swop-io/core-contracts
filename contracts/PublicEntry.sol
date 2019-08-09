@@ -3,6 +3,7 @@ pragma solidity ^0.5.8;
 import "./auth/Guard.sol";
 import "./container/BaseContainer.sol";
 import "./modules/SwopManager.sol";
+import "./modules/auctions/Auctions.sol";
 
 /**
     @title PublicEntry
@@ -35,4 +36,24 @@ contract PublicEntry is BaseContainer, Guard {
         SwopManager(getAddressOfSwopManager()).directBuy.value(msg.value)(refNo, msg.sender, r, s, v);
     }
 
+    function deposit(string calldata refNo) external payable {
+        Auctions(getAddressOfAuctions()).deposit.value(msg.value)(refNo, msg.sender);
+    }
+
+    function close
+    (
+        string calldata refNo,
+        address topBidAmount,
+        uint8 nonce,
+        bytes32 r,
+        bytes32 s,
+        uint8 v
+    ) external
+    {
+        Auctions(getAddressOfAuctions()).close(refNo, msg.sender, topBidAmount, nonce, r, s, v);
+    }
+
+    function refund(string calldata refNo) external {
+        Auctions(getAddressOfAuctions()).refund(refNo, msg.sender);
+    }
 }

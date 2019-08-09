@@ -25,4 +25,12 @@ contract BaseContainer is ContainerManager, ContractNames {
     function getAddressOfFundsDB() public view returns(address) {
         return getContract(CONTRACT_FUNDS_DB);
     }
+
+    function getAddressOfAuctions() public view returns(address) {
+        return getContract(CONTRACT_AUCTIONS);
+    }
+
+    function getAddressOfAuctionsDB() public view returns(address) {
+        return getContract(CONTRACT_AUCTIONS_DB);
+    }
 }

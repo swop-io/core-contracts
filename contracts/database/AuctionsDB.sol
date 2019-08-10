@@ -25,7 +25,7 @@ contract AuctionsDB is Contained {
     {
         
         if(!isBidder(refNo, bidder)){
-            commonDB.setAddressPayable(CONTRACT_NAME_AUCTION_DB, keccak256(abi.encodePacked(refNo)), bidder);
+            commonDB.setAddressPayable(CONTRACT_NAME_AUCTION_DB, keccak256(abi.encodePacked(refNo, 'bidder')), bidder);
             commonDB.setUint(CONTRACT_NAME_AUCTION_DB, keccak256(abi.encodePacked(refNo, 'depositAmount')), depositAmount);
         }else{
             uint256 newTotal = getDepositedAmount(refNo, bidder).add(depositAmount);
@@ -42,6 +42,17 @@ contract AuctionsDB is Contained {
     onlyContract(CONTRACT_AUCTIONS)
     {
          commonDB.setUint(CONTRACT_NAME_AUCTION_DB, keccak256(abi.encodePacked(refNo, 'depositAmount')), 0);
+    }
+
+    function setTopBidder
+    (
+        string calldata refNo,
+        address bidder
+    )
+    external
+    onlyContract(CONTRACT_AUCTIONS)
+    {
+        commonDB.setAddressPayable(CONTRACT_NAME_AUCTION_DB, keccak256(abi.encodePacked(refNo, 'topBidder')), bidder);
     }
 
     function updateAuctionState

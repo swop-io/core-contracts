@@ -50,7 +50,9 @@ contract Auctions is Contained {
         bytes32 r,
         bytes32 s,
         uint8 v
-    ) external
+    )
+    external
+    onlyContained
     {
         require(auctionsDB.getAuctionState(refNo) == AuctionState.ACTIVE, "Auction not active");
 
@@ -65,6 +67,7 @@ contract Auctions is Contained {
 
         address topBidder = ecrecover(messageHash2, v, r, s);
 
+        auctionsDB.setTopBidder(refNo, topBidder);
         auctionsDB.updateAuctionState(refNo, AuctionState.CLOSED);
         emit AuctionClosed(refNo, topBidder);
     }
@@ -75,6 +78,7 @@ contract Auctions is Contained {
         address payable bidder
     )
     external
+    onlyContained
     {
         require(auctionsDB.getAuctionState(refNo) != AuctionState.ACTIVE, "Not able to refund when auction is active");
         require(auctionsDB.isBidder(refNo, bidder), "Not authorized");

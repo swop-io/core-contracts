@@ -10,15 +10,15 @@ import "../container/Contained.sol";
     @author karlptrck
  */
 contract SwopManager is Contained {
+
+    enum TicketState { POSTED, TRANSFER_IN_PROGRESS, SOLD }
     event TicketPosted(string refNo, uint256 amount, address seller, bool forDirectBuy);
     event FundsLocked(string refNo, address buyer);
 
     Funds funds;
     TicketDB ticketDB;
+    TicketState ticketState;
 
-    uint256 public constant TICKET_STATE_FOR_SALE = 1;
-    uint256 public constant TICKET_STATE_TRANSACTION_IN_PROGRESS = 2;
-    uint256 public constant TICKET_STATE_SOLD = 3;
     address public receiver;
 
     /**
@@ -71,7 +71,7 @@ contract SwopManager is Contained {
 
         funds.lockFunds.value(msg.value)(buyer, amount, refNo);
         ticketDB.setTicketBuyer(refNo, buyer);
-        ticketDB.updateTicketStatus(refNo, TICKET_STATE_TRANSACTION_IN_PROGRESS);
+        ticketDB.updateTicketStatus(refNo, TicketState.TRANSACTION_IN_PROGRESS);
 
         emit FundsLocked(refNo, buyer);
     }

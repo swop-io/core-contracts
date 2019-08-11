@@ -71,7 +71,7 @@ contract SwopManager is Contained {
 
         funds.lockFunds.value(msg.value)(buyer, amount, refNo);
         ticketDB.setTicketBuyer(refNo, buyer);
-        ticketDB.updateTicketStatus(refNo, TicketState.TRANSACTION_IN_PROGRESS);
+        ticketDB.updateTicketStatus(refNo, uint(TicketState.TRANSFER_IN_PROGRESS));
 
         emit FundsLocked(refNo, buyer);
     }
@@ -92,7 +92,7 @@ contract SwopManager is Contained {
         // Disburse the ether from Funds contract to the airline and seller
         funds.disburse(buyer, seller, receiver, amount, refNo);
 
-        ticketDB.updateTicketStatus(refNo, TICKET_STATE_SOLD);
+        ticketDB.updateTicketStatus(refNo, uint(TicketState.SOLD));
 
     }
 

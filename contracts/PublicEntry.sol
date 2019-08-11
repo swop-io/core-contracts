@@ -43,7 +43,7 @@ contract PublicEntry is BaseContainer, Guard {
     function close
     (
         string calldata refNo,
-        address topBidAmount,
+        uint256 topBidAmount,
         uint8 nonce,
         bytes32 r,
         bytes32 s,

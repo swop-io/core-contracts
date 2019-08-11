@@ -47,7 +47,7 @@ contract Auctions is Contained {
     (
         string calldata refNo,
         address caller,
-        address topBidAmount,
+        uint256 topBidAmount,
         uint8 nonce,
         bytes32 r,
         bytes32 s,

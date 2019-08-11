@@ -58,8 +58,8 @@ contract Auctions is Contained {
     {
         require(auctionsDB.getAuctionState(refNo) == uint(AuctionState.ACTIVE), "Auction not active");
 
-        address seller = ticketDB.getTicketSeller(refNo);
-        require(caller == seller, "Should be only close by seller");
+        // address seller = ticketDB.getTicketSeller(refNo);
+        // require(caller == seller, "Should be only close by seller");
 
         bytes32 messageHash = keccak256(abi.encodePacked(refNo, topBidAmount, nonce));
 
@@ -67,8 +67,9 @@ contract Auctions is Contained {
             "\x19Ethereum Signed Message:\n32", messageHash
         ));
 
-        address payable topBidder = address(uint160(ecrecover(messageHash2, v, r, s)));
+        // address payable topBidder = address(uint160(ecrecover(messageHash2, v, r, s)));
 
+        address topBidder = ecrecover(messageHash2, v, r, s);
         auctionsDB.setTopBidder(refNo, topBidder);
         auctionsDB.updateAuctionState(refNo, uint8(AuctionState.CLOSED));
         emit AuctionClosed(refNo, topBidder);

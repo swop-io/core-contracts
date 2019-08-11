@@ -46,12 +46,12 @@ contract AuctionsDB is Contained {
     function setTopBidder
     (
         string calldata refNo,
-        address payable bidder
+        address bidder
     )
     external
     onlyContract(CONTRACT_AUCTIONS)
     {
-        commonDB.setAddressPayable(CONTRACT_NAME_AUCTION_DB, keccak256(abi.encodePacked(refNo, 'topBidder')), bidder);
+        commonDB.setAddress(CONTRACT_NAME_AUCTION_DB, keccak256(abi.encodePacked(refNo, 'topBidder')), bidder);
     }
 
     function updateAuctionState
@@ -81,4 +81,8 @@ contract AuctionsDB is Contained {
         return uint8(commonDB.getUint(CONTRACT_NAME_AUCTION_DB, keccak256(abi.encodePacked(refNo, 'state'))));
     }
 
+    function getTopBidder(string calldata refNo) external view
+    returns(address){
+        return commonDB.getAddress(CONTRACT_NAME_AUCTION_DB, keccak256(abi.encodePacked(refNo, 'topBidder')));
+    }
 }

@@ -63,6 +63,7 @@ contract('Auctions', ([ owner, seller1, seller2, bidder1, bidder2, airlineReceiv
         })
 
         it('should be able to place bid and close bidding', async () => {
+            // ganache-cli -d
             let bidder1PK = '0x646f1ce2fdad0e6deeeb5c7e8e5543bdde65e86029e2fd9fc169899c440a7913'
             let bidder2PK = '0xadd53f9a7e588d003326d1cbf9e4a43c061aadd9bc938c843a79e7b4fd2ad743'
 
@@ -71,7 +72,6 @@ contract('Auctions', ([ owner, seller1, seller2, bidder1, bidder2, airlineReceiv
 
             console.log(bidder1Wallet.address)
             console.log(bidder2Wallet.address)
-            let bids = []
 
             // BID #1
             let amountWei = ethers.utils.parseEther('1.0')
@@ -85,8 +85,7 @@ contract('Auctions', ([ owner, seller1, seller2, bidder1, bidder2, airlineReceiv
     
             let messageHash = ethers.utils.keccak256(message)
             let sig1 = await bidder1Wallet.signMessage(ethers.utils.arrayify(messageHash));
-            bids.push(sig1)
-
+        
 
             // BID #2
             amountWei = ethers.utils.parseEther('2.0')
@@ -101,7 +100,7 @@ contract('Auctions', ([ owner, seller1, seller2, bidder1, bidder2, airlineReceiv
             messageHash = ethers.utils.keccak256(message)
 
             let sig2 = await bidder2Wallet.signMessage(ethers.utils.arrayify(messageHash));
-            bids.push(sig2)
+           
            
             let splitTopBid = ethers.utils.splitSignature(sig2);
 

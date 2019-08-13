@@ -6,8 +6,8 @@ import "../lib/SafeMath.sol";
 
 contract Funds is Contained {
     using SafeMath for uint256;
-    event DisburseSeller(string refNo, address seller, uint256 amount);
-    event DisburseAirline(string refNo, address airline, uint256 amount);
+    event DisburseSeller(bytes32 refNo, address seller, uint256 amount);
+    event DisburseAirline(bytes32 refNo, address airline, uint256 amount);
 
     FundsDB fundsDB;
 
@@ -31,7 +31,7 @@ contract Funds is Contained {
     (
         address buyer,
         uint256 amount,
-        string calldata refNo
+        bytes32 refNo
     )
     external payable
     onlyContract(CONTRACT_SWOP_MANAGER)
@@ -51,7 +51,7 @@ contract Funds is Contained {
         address seller,
         address airline,
         uint256 amount,
-        string calldata refNo
+        bytes32 refNo
     )
     external
     onlyContract(CONTRACT_SWOP_MANAGER)

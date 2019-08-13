@@ -27,7 +27,7 @@ contract TicketDB is Contained {
      */
     function addTicket
     (
-        string calldata refNo,
+        bytes32 refNo,
         uint256 amount,
         address payable seller,
         bool forDirectBuy
@@ -46,7 +46,7 @@ contract TicketDB is Contained {
         @dev Get the ticket amount
         @param refNo unique reference number
      */
-    function getTicketAmount(string calldata refNo) external view
+    function getTicketAmount(bytes32 refNo) external view
     returns (uint256) {
         return commonDB.getUint(CONTRACT_NAME_TICKET_DB, keccak256(abi.encodePacked(refNo, 'amount')));
     }
@@ -55,7 +55,7 @@ contract TicketDB is Contained {
         @dev Get the ticket seller
         @param refNo unique reference number
      */
-    function getTicketSeller(string calldata refNo) external view
+    function getTicketSeller(bytes32 refNo) external view
     returns (address) {
         return commonDB.getAddress(CONTRACT_NAME_TICKET_DB, keccak256(abi.encodePacked(refNo)));
     }
@@ -64,7 +64,7 @@ contract TicketDB is Contained {
         @dev Set Ticket Buyer
         @param refNo unique reference number
      */
-    function setTicketBuyer(string calldata refNo, address buyer) external onlyContract(CONTRACT_SWOP_MANAGER) {
+    function setTicketBuyer(bytes32 refNo, address buyer) external onlyContract(CONTRACT_SWOP_MANAGER) {
         commonDB.setAddress(CONTRACT_NAME_TICKET_DB, keccak256(abi.encodePacked(refNo, 'buyer')), buyer);
     }
 
@@ -73,15 +73,15 @@ contract TicketDB is Contained {
         @param refNo unique reference number
         @param value Ticket status
      */
-    function updateTicketStatus(string calldata refNo, uint256 value) external onlyContract(CONTRACT_SWOP_MANAGER) {
+    function updateTicketStatus(bytes32 refNo, uint256 value) external onlyContract(CONTRACT_SWOP_MANAGER) {
         commonDB.setUint(CONTRACT_NAME_TICKET_DB, keccak256(abi.encodePacked(refNo, 'state')), value);
     }
 
-    function getTicketStatus(string calldata refNo) external view returns (uint256) {
+    function getTicketStatus(bytes32 refNo) external view returns (uint256) {
         return commonDB.getUint(CONTRACT_NAME_TICKET_DB, keccak256(abi.encodePacked(refNo, 'state')));
     }
 
-    function getTicketBuyer(string calldata refNo) external view returns (address) {
+    function getTicketBuyer(bytes32 refNo) external view returns (address) {
         return commonDB.getAddress(CONTRACT_NAME_TICKET_DB, keccak256(abi.encodePacked(refNo, 'buyer')));
     }
 

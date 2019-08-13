@@ -27,7 +27,7 @@ contract FundsDB is Contained {
     (
         address buyer,
         uint256 amount,
-        string calldata refNo
+        bytes32 refNo
     )
     external
     onlyContract(CONTRACT_FUNDS)
@@ -47,7 +47,7 @@ contract FundsDB is Contained {
     function releaseLockedFunds
     (
         address buyer,
-        string calldata refNo
+        bytes32 refNo
     )
     external
     onlyContract(CONTRACT_FUNDS)
@@ -64,7 +64,7 @@ contract FundsDB is Contained {
     function getLockedAmount
     (
         address buyer,
-        string calldata refNo
+        bytes32 refNo
     )
     external view returns (uint256)
     {

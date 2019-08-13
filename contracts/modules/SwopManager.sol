@@ -12,8 +12,8 @@ import "../container/Contained.sol";
 contract SwopManager is Contained {
 
     enum TicketState { POSTED, TRANSFER_IN_PROGRESS, SOLD }
-    event TicketPosted(string refNo, uint256 amount, address seller, bool forDirectBuy);
-    event FundsLocked(string refNo, address buyer);
+    event TicketPosted(bytes32 refNo, uint256 amount, address seller, bool forDirectBuy);
+    event FundsLocked(bytes32 refNo, address buyer);
 
     Funds funds;
     TicketDB ticketDB;
@@ -45,7 +45,7 @@ contract SwopManager is Contained {
      */
     function postTicket
     (
-        string calldata refNo,
+        bytes32 refNo,
         uint256 amount,
         address payable seller,
         bool forDirectBuy
@@ -62,7 +62,7 @@ contract SwopManager is Contained {
         @param refNo unique reference number
         @param buyer address of the buyer
      */
-    function buyTicket(string memory refNo, address buyer)
+    function buyTicket(bytes32 refNo, address buyer)
     public payable
     onlyContained
     {
@@ -80,7 +80,7 @@ contract SwopManager is Contained {
         @dev Complete the transaction by disbursing the amount to seller and airline 
         @param refNo unique reference number
      */
-    function completeTransaction(string calldata refNo)
+    function completeTransaction(bytes32 refNo)
     external
     onlyContained
     {
@@ -106,7 +106,7 @@ contract SwopManager is Contained {
      */
     function directBuy
     (
-        string calldata refNo,
+        bytes32 refNo,
         address buyer,
         bytes32 r,
         bytes32 s,

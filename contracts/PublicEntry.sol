@@ -12,21 +12,21 @@ import "./modules/auctions/Auctions.sol";
  */
 contract PublicEntry is BaseContainer, Guard {
 
-    function postTicket(string calldata refNo, uint256 amount, bool forDirectBuy) external {
+    function postTicket(bytes32 refNo, uint256 amount, bool forDirectBuy) external {
         SwopManager(getAddressOfSwopManager()).postTicket(refNo, amount, msg.sender, forDirectBuy);
     }
 
-    function buyTicket(string calldata refNo) external payable {
+    function buyTicket(bytes32 refNo) external payable {
         SwopManager(getAddressOfSwopManager()).buyTicket.value(msg.value)(refNo, msg.sender);
     }
 
-    function completeTransaction(string calldata refNo) external onlyAdmin {
+    function completeTransaction(bytes32 refNo) external onlyAdmin {
        SwopManager(getAddressOfSwopManager()).completeTransaction(refNo);
     }
 
     function directBuy
     (
-        string calldata refNo,
+        bytes32 refNo,
         bytes32 r,
         bytes32 s,
         uint8 v

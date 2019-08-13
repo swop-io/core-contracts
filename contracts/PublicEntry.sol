@@ -36,15 +36,15 @@ contract PublicEntry is BaseContainer, Guard {
         SwopManager(getAddressOfSwopManager()).directBuy.value(msg.value)(refNo, msg.sender, r, s, v);
     }
 
-    function deposit(string calldata refNo) external payable {
+    function deposit(bytes32 refNo) external payable {
         Auctions(getAddressOfAuctions()).deposit.value(msg.value)(refNo, msg.sender);
     }
 
     function close
     (
-        string calldata refNo,
+        bytes32 refNo,
         uint256 topBidAmount,
-        uint8 nonce,
+        bytes32 nonce,
         bytes32 r,
         bytes32 s,
         uint8 v
@@ -53,7 +53,7 @@ contract PublicEntry is BaseContainer, Guard {
         Auctions(getAddressOfAuctions()).close(refNo, msg.sender, topBidAmount, nonce, r, s, v);
     }
 
-    function refund(string calldata refNo) external {
+    function refund(bytes32 refNo) external {
         Auctions(getAddressOfAuctions()).refund(refNo, msg.sender);
     }
 }

@@ -9,9 +9,9 @@ contract Auctions is Contained {
 
     enum AuctionState { ACTIVE, CANCELLED, CLOSED, COMPLETED }
 
-    event NewDeposit(string refNo, uint256 amount, address bidder);
-    event AuctionClosed(string refNo, address topBidder);
-    event Refunded(string refNo, uint256 amount, address bidder);
+    event NewDeposit(bytes32 refNo, uint256 amount, address bidder);
+    event AuctionClosed(bytes32 refNo, address topBidder);
+    event Refunded(bytes32 refNo, uint256 amount, address bidder);
 
     AuctionsDB auctionsDB;
     TicketDB ticketDB;
@@ -29,7 +29,7 @@ contract Auctions is Contained {
 
     function deposit
     (
-        string calldata refNo,
+        bytes32 refNo,
         address payable bidder
     )
     external payable
@@ -45,10 +45,10 @@ contract Auctions is Contained {
 
     function close
     (
-        string calldata refNo,
+        bytes32 refNo,
         address caller,
         uint256 topBidAmount,
-        uint8 nonce,
+        bytes32 nonce,
         bytes32 r,
         bytes32 s,
         uint8 v
@@ -67,9 +67,7 @@ contract Auctions is Contained {
             "\x19Ethereum Signed Message:\n32", messageHash
         ));
 
-        // address payable topBidder = address(uint160(ecrecover(messageHash2, v, r, s)));
-
-        address topBidder = ecrecover(messageHash2, v, r, s);
+        address payable topBidder = address(uint160(ecrecover(messageHash2, v, r, s)));
         auctionsDB.setTopBidder(refNo, topBidder);
         auctionsDB.updateAuctionState(refNo, uint8(AuctionState.CLOSED));
         emit AuctionClosed(refNo, topBidder);
@@ -77,7 +75,7 @@ contract Auctions is Contained {
 
     function refund
     (
-        string calldata refNo,
+        bytes32 refNo,
         address payable bidder
     )
     external

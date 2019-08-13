@@ -16,7 +16,7 @@ contract AuctionsDB is Contained {
 
     function addDeposit
     (
-        string calldata refNo,
+        bytes32 refNo,
         uint256 depositAmount,
         address payable bidder
     )
@@ -34,9 +34,9 @@ contract AuctionsDB is Contained {
 
     function removeDeposit
     (
-        string calldata refNo,
+        bytes32 refNo,
         address bidder
-    ) 
+    )
     external
     onlyContract(CONTRACT_AUCTIONS)
     {
@@ -45,7 +45,7 @@ contract AuctionsDB is Contained {
 
     function setTopBidder
     (
-        string calldata refNo,
+        bytes32 refNo,
         address bidder
     )
     external
@@ -56,7 +56,7 @@ contract AuctionsDB is Contained {
 
     function updateAuctionState
     (
-        string calldata refNo,
+        bytes32 refNo,
         uint8 state
     )
     external
@@ -66,22 +66,22 @@ contract AuctionsDB is Contained {
     }
 
     // GETTERS
-    function isBidder(string memory refNo, address bidder) public view
+    function isBidder(bytes32 refNo, address bidder) public view
     returns(bool){
         return commonDB.getAddress(CONTRACT_NAME_AUCTION_DB, keccak256(abi.encodePacked(refNo, bidder, 'bidder'))) == address(0) ? false : true;
     }
 
-    function getDepositedAmount(string memory refNo, address bidder) public view
+    function getDepositedAmount(bytes32 refNo, address bidder) public view
     returns(uint256){
         return commonDB.getUint(CONTRACT_NAME_AUCTION_DB, keccak256(abi.encodePacked(refNo, bidder, 'depositAmount')));
     }
 
-    function getAuctionState(string calldata refNo) external view
+    function getAuctionState(bytes32 refNo) external view
     returns(uint8){
         return uint8(commonDB.getUint(CONTRACT_NAME_AUCTION_DB, keccak256(abi.encodePacked(refNo, 'state'))));
     }
 
-    function getTopBidder(string calldata refNo) external view
+    function getTopBidder(bytes32 refNo) external view
     returns(address){
         return commonDB.getAddress(CONTRACT_NAME_AUCTION_DB, keccak256(abi.encodePacked(refNo, 'topBidder')));
     }

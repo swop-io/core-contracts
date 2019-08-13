@@ -38,7 +38,7 @@ contract('Auctions', ([ owner, seller1, seller2, bidder1, bidder2, airlineReceiv
 
     })
 
-    let swopRefNo = 'SWP123'
+    let swopRefNo = ethers.utils.formatBytes32String('SWP123')
     let depositAmount = 1000
 
     describe('Features', () => {
@@ -70,12 +70,8 @@ contract('Auctions', ([ owner, seller1, seller2, bidder1, bidder2, airlineReceiv
             let bidder1Wallet = new ethers.Wallet(bidder1PK)
             let bidder2Wallet = new ethers.Wallet(bidder2PK)
 
-            console.log(bidder1Wallet.address)
-            console.log(bidder2Wallet.address)
-
             // BID #1
             let amountWei = ethers.utils.parseEther('1.0')
-            let swopRefNo = ethers.utils.formatBytes32String('SWP123');
             let nonce = 0
             let message = ethers.utils.concat([
                             ethers.utils.hexZeroPad(swopRefNo, 32),
@@ -90,35 +86,32 @@ contract('Auctions', ([ owner, seller1, seller2, bidder1, bidder2, airlineReceiv
             // BID #2
             amountWei = ethers.utils.parseEther('2.0')
             nonce = 1
+            let bytesNonce = ethers.utils.formatBytes32String(nonce + ':nonce');
+
             message = ethers.utils.concat([
                             ethers.utils.hexZeroPad(swopRefNo, 32),
                             ethers.utils.hexZeroPad(ethers.utils.hexlify(amountWei), 32),
-                            ethers.utils.hexZeroPad(ethers.utils.hexlify(nonce), 8)
+                            ethers.utils.hexZeroPad(bytesNonce, 32)
                            
             ])
     
             messageHash = ethers.utils.keccak256(message)
 
-            let sig2 = await bidder2Wallet.signMessage(ethers.utils.arrayify(messageHash));
-           
-           
-            let splitTopBid = ethers.utils.splitSignature(sig2);
+            let sig2 = await bidder2Wallet.signMessage(ethers.utils.arrayify(messageHash))
+             
+            let splitTopBid = ethers.utils.splitSignature(sig2)
 
-            console.log('ecrecover: ' + ethers.utils.recoverAddress(messageHash, sig2))
-            
             // CLOSE AUCTION
             await this.entry.close(swopRefNo, 
                                     amountWei,
-                                    ethers.utils.hexZeroPad(ethers.utils.hexlify(nonce), 8), 
+                                    bytesNonce, 
                                     splitTopBid.r, 
                                     splitTopBid.s, 
                                     splitTopBid.v)
                                     .should.be.fulfilled
             
             let topBidder = await this.auctionsDB.getTopBidder(swopRefNo)
-            console.log('topBidder: ' + topBidder)
-
-            // topBidder.should.be.equal(bidder2)
+            topBidder.should.be.equal(bidder2)
         })
 
         it('should be able to refund funds', async () => {

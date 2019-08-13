@@ -36,7 +36,7 @@ contract TicketDB is Contained {
     onlyContract(CONTRACT_SWOP_MANAGER)
     {
 
-        commonDB.setAddressPayable(CONTRACT_NAME_TICKET_DB, keccak256(abi.encodePacked(refNo)), seller);
+        commonDB.setAddressPayable(CONTRACT_NAME_TICKET_DB, keccak256(abi.encodePacked(refNo, 'seller')), seller);
         commonDB.setUint(CONTRACT_NAME_TICKET_DB, keccak256(abi.encodePacked(refNo, 'amount')), amount);
         commonDB.setUint(CONTRACT_NAME_TICKET_DB, keccak256(abi.encodePacked(refNo, 'state')), TICKET_STATE_FOR_SALE);
         commonDB.setBoolean(CONTRACT_NAME_TICKET_DB, keccak256(abi.encodePacked(refNo, 'forDirectBuy')), forDirectBuy);
@@ -57,7 +57,7 @@ contract TicketDB is Contained {
      */
     function getTicketSeller(bytes32 refNo) external view
     returns (address) {
-        return commonDB.getAddress(CONTRACT_NAME_TICKET_DB, keccak256(abi.encodePacked(refNo)));
+        return commonDB.getAddress(CONTRACT_NAME_TICKET_DB, keccak256(abi.encodePacked(refNo, 'seller')));
     }
 
     /**

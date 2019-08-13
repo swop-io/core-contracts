@@ -13,6 +13,11 @@ const AuctionsDB = artifacts.require('AuctionsDB')
 const TicketDB = artifacts.require('TicketDB')
 const Auctions = artifacts.require('Auctions')
 const AuctionsEscrow = artifacts.require('AuctionsEscrow')
+const SwopManager = artifacts.require('SwopManager')
+const Funds = artifacts.require('Funds')
+const FundsDB = artifacts.require('FundsDB')
+
+let swopRefNo = ethers.utils.formatBytes32String('SWP123')
 
 contract('Auctions', ([ owner, seller1, seller2, bidder1, bidder2, airlineReceiver ]) => {
     beforeEach(async () => {
@@ -20,25 +25,40 @@ contract('Auctions', ([ owner, seller1, seller2, bidder1, bidder2, airlineReceiv
         this.commonDB = await CommonDB.new()
         this.ticketDB = await TicketDB.new(this.commonDB.address)
         this.auctionsDB = await AuctionsDB.new(this.commonDB.address)
+        this.fundsDB = await FundsDB.new(this.commonDB.address)
+        this.funds = await Funds.new()
         this.auctions = await Auctions.new()
         this.escrow = await AuctionsEscrow.new()
+        this.swopManager = await SwopManager.new()
 
         await this.entry.addContract('CommonDB', this.commonDB.address)
         await this.entry.addContract('AuctionsDB', this.auctionsDB.address)
         await this.entry.addContract('TicketDB', this.ticketDB.address)
         await this.entry.addContract('Auctions', this.auctions.address)
         await this.entry.addContract('AuctionsEscrow', this.escrow.address)
+        await this.entry.addContract('SwopManager', this.swopManager.address)
+        await this.entry.addContract('FundsDB', this.fundsDB.address)
+        await this.entry.addContract('Funds', this.funds.address)
         
         await this.commonDB.setContainerEntry(this.entry.address)
         await this.ticketDB.setContainerEntry(this.entry.address)
         await this.auctionsDB.setContainerEntry(this.entry.address)
         await this.auctions.setContainerEntry(this.entry.address)
         await this.escrow.setContainerEntry(this.entry.address)
+        await this.fundsDB.setContainerEntry(this.entry.address)
+        await this.funds.setContainerEntry(this.entry.address)
+        await this.swopManager.setContainerEntry(this.entry.address)
+
+       
         await this.auctions.init()
+        await this.swopManager.init()
+        await this.swopManager.setReceiverAddress(airlineReceiver)
+
+        await this.entry.postTicket(swopRefNo, ethers.utils.parseEther('1.0'), false, { from: seller1 })
 
     })
 
-    let swopRefNo = ethers.utils.formatBytes32String('SWP123')
+
     let depositAmount = 1000
 
     describe('Features', () => {
@@ -63,6 +83,8 @@ contract('Auctions', ([ owner, seller1, seller2, bidder1, bidder2, airlineReceiv
         })
 
         it('should be able to place bid and close bidding', async () => {
+
+
             // ganache-cli -d
             let bidder1PK = '0x646f1ce2fdad0e6deeeb5c7e8e5543bdde65e86029e2fd9fc169899c440a7913'
             let bidder2PK = '0xadd53f9a7e588d003326d1cbf9e4a43c061aadd9bc938c843a79e7b4fd2ad743'
@@ -107,7 +129,7 @@ contract('Auctions', ([ owner, seller1, seller2, bidder1, bidder2, airlineReceiv
                                     bytesNonce, 
                                     splitTopBid.r, 
                                     splitTopBid.s, 
-                                    splitTopBid.v)
+                                    splitTopBid.v, { from: seller1 })
                                     .should.be.fulfilled
             
             let topBidder = await this.auctionsDB.getTopBidder(swopRefNo)

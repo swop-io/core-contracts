@@ -57,9 +57,7 @@ contract Auctions is Contained {
     onlyContained
     {
         require(auctionsDB.getAuctionState(refNo) == uint(AuctionState.ACTIVE), "Auction not active");
-
-        // address seller = ticketDB.getTicketSeller(refNo);
-        // require(caller == seller, "Should be only close by seller");
+        require(ticketDB.getTicketSeller(refNo) == caller, "Should be only close by seller");
 
         bytes32 messageHash = keccak256(abi.encodePacked(refNo, topBidAmount, nonce));
 

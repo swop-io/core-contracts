@@ -1,10 +1,14 @@
-
+const ethers = require('ethers')
 const PublicEntry = artifacts.require('PublicEntry')
 const CommonDB = artifacts.require('CommonDB')
 const FundsDB = artifacts.require('FundsDB')
 const TicketDB = artifacts.require('TicketDB')
 const SwopManager = artifacts.require('SwopManager')
 const Funds = artifacts.require('Funds')
+
+
+let swopRefNo = ethers.utils.formatBytes32String('SWP123')
+let ticketAmount = 981231231
 
 contract('SwopManager', ([ owner, seller1, seller2, buyer1, buyer2, airlineReceiver ]) => {
     beforeEach(async () => {
@@ -38,40 +42,28 @@ contract('SwopManager', ([ owner, seller1, seller2, buyer1, buyer2, airlineRecei
 
     describe('Features', () => {
         it('should be able to post ticket', async () => {
-            // await this.entry.postTicket('ref123', 12312312, { from: seller1 })
-            // let ticketStatus = await this.ticketDB.getTicketStatus('ref123')
-
-            // assert.equal(ticketStatus.toNumber(), 1)
+            await this.entry.postTicket(swopRefNo, ticketAmount, 1234123, false, { from: seller1 })
+            let ticketStatus = await this.ticketDB.getTicketStatus(swopRefNo)
+            assert.equal(ticketStatus.toNumber(), 0)
         })
 
 
         it('should be able to buy ticket', async () => {
-            // let swopRefNo = 'refNo1'
-            // let ticketAmount = 981231231
+            await this.entry.postTicket(swopRefNo, ticketAmount, 1234123, false, { from: seller1 })
+            await this.entry.buyTicket(swopRefNo, { from : buyer1, value : ticketAmount })
 
-            // await this.entry.postTicket(swopRefNo, ticketAmount, { from: seller1 })
-            // await this.entry.buyTicket(swopRefNo, { from : buyer1, value : ticketAmount })
-
-            // let contractBalance = await web3.eth.getBalance(this.funds.address)
-            // console.log(contractBalance)
-
-            // assert.equal(contractBalance, ticketAmount)
+            let contractBalance = await web3.eth.getBalance(this.funds.address)
+            assert.equal(contractBalance, ticketAmount)
         })
 
         it('should be able to disburse funds', async () => {
-            // let swopRefNo = 'refNo1'
-            // let ticketAmount = 981231231
+            await this.entry.postTicket(swopRefNo, ticketAmount, 1234123, false, { from: seller1 })
+            await this.entry.buyTicket(swopRefNo, { from : buyer1, value : ticketAmount })
 
-            // await this.entry.postTicket(swopRefNo, ticketAmount, { from: seller1 })
-            // await this.entry.buyTicket(swopRefNo, { from : buyer1, value : ticketAmount })
+            let sellerBalance = await web3.eth.getBalance(seller1)
+            await this.entry.completeTransaction(swopRefNo)
 
-            // let sellerBalance = await web3.eth.getBalance(seller1)
-            // console.log(sellerBalance)
-            // await this.entry.completeTransaction(swopRefNo)
-
-            // let newBalance = await web3.eth.getBalance(seller1)
-            // console.log(newBalance)
-
+            let newBalance = await web3.eth.getBalance(seller1)
             // assert.isAbove(sellerBalance, newBalance)
         })
     })

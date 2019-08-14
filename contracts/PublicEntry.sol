@@ -12,8 +12,8 @@ import "./modules/auctions/Auctions.sol";
  */
 contract PublicEntry is BaseContainer, Guard {
 
-    function postTicket(bytes32 refNo, uint256 amount, bool forDirectBuy) external {
-        SwopManager(getAddressOfSwopManager()).postTicket(refNo, amount, msg.sender, forDirectBuy);
+    function postTicket(bytes32 refNo, uint256 amount, uint256 lowestAskAmount, bool forDirectBuy) external {
+        SwopManager(getAddressOfSwopManager()).postTicket(refNo, amount, msg.sender, lowestAskAmount, forDirectBuy);
     }
 
     function buyTicket(bytes32 refNo) external payable {

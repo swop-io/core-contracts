@@ -12,9 +12,7 @@ contract TicketDB is Contained {
 
     CommonDB commonDB;
     string constant CONTRACT_NAME_TICKET_DB = "TicketDB";
-    uint256 public constant TICKET_STATE_FOR_SALE = 1;
-    uint256 public constant TICKET_STATE_TRANSACTION_IN_PROGRESS = 2;
-    uint256 public constant TICKET_STATE_SOLD = 3;
+    enum TicketState { POSTED, TRANSFER_IN_PROGRESS, SOLD }
 
     constructor(CommonDB _commonDB) public {
         commonDB = _commonDB;
@@ -30,15 +28,16 @@ contract TicketDB is Contained {
         bytes32 refNo,
         uint256 amount,
         address payable seller,
+        uint256 lowestAskAmount,
         bool forDirectBuy
     )
     external
     onlyContract(CONTRACT_SWOP_MANAGER)
     {
-
         commonDB.setAddressPayable(CONTRACT_NAME_TICKET_DB, keccak256(abi.encodePacked(refNo, 'seller')), seller);
         commonDB.setUint(CONTRACT_NAME_TICKET_DB, keccak256(abi.encodePacked(refNo, 'amount')), amount);
-        commonDB.setUint(CONTRACT_NAME_TICKET_DB, keccak256(abi.encodePacked(refNo, 'state')), TICKET_STATE_FOR_SALE);
+        commonDB.setUint(CONTRACT_NAME_TICKET_DB, keccak256(abi.encodePacked(refNo, 'state')), uint(TicketState.POSTED));
+        commonDB.setUint(CONTRACT_NAME_TICKET_DB, keccak256(abi.encodePacked(refNo, 'lowestAskAmount')), lowestAskAmount);
         commonDB.setBoolean(CONTRACT_NAME_TICKET_DB, keccak256(abi.encodePacked(refNo, 'forDirectBuy')), forDirectBuy);
     }
 

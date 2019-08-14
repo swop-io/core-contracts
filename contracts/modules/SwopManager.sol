@@ -48,12 +48,13 @@ contract SwopManager is Contained {
         bytes32 refNo,
         uint256 amount,
         address payable seller,
+        uint256 lowestAskAmount,
         bool forDirectBuy
     )
     external
     onlyContained
     {
-        ticketDB.addTicket(refNo, amount, seller, forDirectBuy);
+        ticketDB.addTicket(refNo, amount, seller, lowestAskAmount, forDirectBuy);
         emit TicketPosted(refNo, amount, seller, forDirectBuy);
     }
 

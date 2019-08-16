@@ -1,32 +1,41 @@
+Starting migrations...
+======================
+> Network name:    'ropsten'
+> Network id:      3
+> Block gas limit: 0x7a121d
+
+
+2_deployments.js
+================
 
    Deploying 'PublicEntry'
    -----------------------
-   > transaction hash:    0x185a7f68a45ce180b77486896c5416be5fa37ec832a4d197f6b16f859f686932
-   > Blocks: 1            Seconds: 16
-   > contract address:    0x2A8F1Ea7d561A8992b11666252DC4c13a1ab9683
-   > block number:        5931200
-   > block timestamp:     1562336506
+   > transaction hash:    0xa193151ef99033864d889b0530b49a46c3892de414bb3b314fe3c1447b866743
+   > Blocks: 0            Seconds: 4
+   > contract address:    0xADae430656F2f58D3b99dd35A6f10E7c5345B45e
+   > block number:        6205528
+   > block timestamp:     1565980842
    > account:             0xE5CDaa796A8AA9009FEBA23395f5FC083e462283
-   > balance:             2.413878027
-   > gas used:            1024645
+   > balance:             5.602075562
+   > gas used:            1296308
    > gas price:           20 gwei
    > value sent:          0 ETH
-   > total cost:          0.0204929 ETH
+   > total cost:          0.02592616 ETH
 
    Pausing for 2 confirmations...
    ------------------------------
-   > confirmation number: 1 (block: 5931200)
-   > confirmation number: 3 (block: 5931202)
+   > confirmation number: 1 (block: 6205528)
+   > confirmation number: 2 (block: 6205529)
 
    Deploying 'CommonDB'
    --------------------
-   > transaction hash:    0x2aed4036c720331f84a9db362071aa6f22cf31308b9171eb1cfc42ecb51d9ecd
-   > Blocks: 1            Seconds: 28
-   > contract address:    0xf8985A356f05e21FC7775f6f73B80a7e46369551
-   > block number:        5931204
-   > block timestamp:     1562336561
+   > transaction hash:    0xec5659003c7148f14722cd5b768e3f37488b93e69c791451caf72b904627d221
+   > Blocks: 1            Seconds: 12
+   > contract address:    0x213EF8e37EDD5181eD0D1d43b161a16aD2A84dE5
+   > block number:        6205532
+   > block timestamp:     1565980873
    > account:             0xE5CDaa796A8AA9009FEBA23395f5FC083e462283
-   > balance:             2.353155247
+   > balance:             5.541352782
    > gas used:            3036139
    > gas price:           20 gwei
    > value sent:          0 ETH
@@ -34,91 +43,146 @@
 
    Pausing for 2 confirmations...
    ------------------------------
-   > confirmation number: 1 (block: 5931205)
-   > confirmation number: 2 (block: 5931206)
+   > confirmation number: 2 (block: 6205534)
 
    Deploying 'FundsDB'
    -------------------
-   > transaction hash:    0xdd7783d9f82930cd255f444e0476abc3ecfcf22dfd3910d9e3a64165dc76bfd1
-   > Blocks: 2            Seconds: 36
-   > contract address:    0x375B1640A938C0a3DF1257C96D24e866887DECF7
-   > block number:        5931208
-   > block timestamp:     1562336631
+   > transaction hash:    0x91f2df755f15177228d1e1ce3c362dc1a94fbc7828d13fa8583e386d59bad689
+   > Blocks: 1            Seconds: 28
+   > contract address:    0x2DCebce5Fd9fD1D9A4B57d5DAe00D6310c81cb1b
+   > block number:        6205536
+   > block timestamp:     1565980900
    > account:             0xE5CDaa796A8AA9009FEBA23395f5FC083e462283
-   > balance:             2.327070747
-   > gas used:            1304225
+   > balance:             5.516643402
+   > gas used:            1235469
    > gas price:           20 gwei
    > value sent:          0 ETH
-   > total cost:          0.0260845 ETH
+   > total cost:          0.02470938 ETH
 
    Pausing for 2 confirmations...
    ------------------------------
-   > confirmation number: 1 (block: 5931209)
-   > confirmation number: 2 (block: 5931210)
+   > confirmation number: 1 (block: 6205537)
+   > confirmation number: 2 (block: 6205538)
 
    Deploying 'TicketDB'
    --------------------
-   > transaction hash:    0x9432b366162e6160d6f544f56ef10601b4a468066b6724c2695efdd8754a63cb
-   > Blocks: 1            Seconds: 28
-   > contract address:    0xF9f5C82364b6C882D5341aa907956638c9e99780
-   > block number:        5931212
-   > block timestamp:     1562336712
+   > transaction hash:    0xd6f89c4d8d95b54fadd2256d2e811e8f44c8a7c56a2e540be06110ce1e55acb4
+   > Blocks: 1            Seconds: 4
+   > contract address:    0xf8d59181e66cF1b448F038329a3E711Ae0D58b15
+   > block number:        6205540
+   > block timestamp:     1565980977
    > account:             0xE5CDaa796A8AA9009FEBA23395f5FC083e462283
-   > balance:             2.272176047
-   > gas used:            2744735
+   > balance:             5.471470102
+   > gas used:            2258665
    > gas price:           20 gwei
    > value sent:          0 ETH
-   > total cost:          0.0548947 ETH
+   > total cost:          0.0451733 ETH
 
    Pausing for 2 confirmations...
    ------------------------------
-   > confirmation number: 1 (block: 5931212)
-   > confirmation number: 2 (block: 5931213)
+   > confirmation number: 1 (block: 6205541)
+   > confirmation number: 2 (block: 6205542)
+
+   Deploying 'AuctionsDB'
+   ----------------------
+   > transaction hash:    0x63735c00751c3d4081f44b15947e2d59c7a572764b24802ada056d22d7bf9b46
+   > Blocks: 0            Seconds: 4
+   > contract address:    0xB7E5f9158bE253618171C9F99A619a8e6Fb74F3F
+   > block number:        6205544
+   > block timestamp:     1565981003
+   > account:             0xE5CDaa796A8AA9009FEBA23395f5FC083e462283
+   > balance:             5.421000022
+   > gas used:            2523504
+   > gas price:           20 gwei
+   > value sent:          0 ETH
+   > total cost:          0.05047008 ETH
+
+   Pausing for 2 confirmations...
+   ------------------------------
+   > confirmation number: 1 (block: 6205544)
+   > confirmation number: 2 (block: 6205545)
 
    Deploying 'Funds'
    -----------------
-   > transaction hash:    0xf7cd340e41ffb51a372ea637cb7b8cfd4f57ffdf5dcaa27f1b8589633e33de95
-   > Blocks: 0            Seconds: 8
-   > contract address:    0x4959857003cf547597DFB46e653B128830Ba12Ee
-   > block number:        5931215
-   > block timestamp:     1562336741
+   > transaction hash:    0x3c69ca5ff8825fe29638f12bfdc6fe8fafddebb0cbd957a656ddecec87d8707a
+   > Blocks: 2            Seconds: 76
+   > contract address:    0xBE64d39d62E7Dd3e94EC428AB9FDF1af374C98E6
+   > block number:        6205548
+   > block timestamp:     1565981089
    > account:             0xE5CDaa796A8AA9009FEBA23395f5FC083e462283
-   > balance:             2.255625287
-   > gas used:            827538
+   > balance:             5.397786842
+   > gas used:            1160659
    > gas price:           20 gwei
    > value sent:          0 ETH
-   > total cost:          0.01655076 ETH
+   > total cost:          0.02321318 ETH
 
    Pausing for 2 confirmations...
    ------------------------------
-   > confirmation number: 1 (block: 5931215)
-   > confirmation number: 2 (block: 5931216)
+   > confirmation number: 2 (block: 6205549)
+
+   Deploying 'Auctions'
+   --------------------
+   > transaction hash:    0xc2f61ef75b330098362c6f61891106939a3756ab7da9e4df84a720606ea5ceca
+   > Blocks: 2            Seconds: 68
+   > contract address:    0xA71e46169f11d534a84834Cc7fdAe0E0318Cc2aa
+   > block number:        6205552
+   > block timestamp:     1565981140
+   > account:             0xE5CDaa796A8AA9009FEBA23395f5FC083e462283
+   > balance:             5.357413122
+   > gas used:            2018686
+   > gas price:           20 gwei
+   > value sent:          0 ETH
+   > total cost:          0.04037372 ETH
+
+   Pausing for 2 confirmations...
+   ------------------------------
+   > confirmation number: 1 (block: 6205552)
+   > confirmation number: 2 (block: 6205553)
 
    Deploying 'SwopManager'
    -----------------------
-   > transaction hash:    0x6eb7daa948367541a167f475f46cedadefc45c7a7c3ac39f6bb88a8045c75b8d
-   > Blocks: 1            Seconds: 16
-   > contract address:    0x159F5A146CA47c9D32027D9D4E0fAD7ECdE8F3A9
-   > block number:        5931219
-   > block timestamp:     1562336818
+   > transaction hash:    0x2a897e76bcdf728828fe2c605c3dca9c65125d47713b9a128e8ea9ea2da73718
+   > Blocks: 1            Seconds: 48
+   > contract address:    0xa7E7580407769640b761C0A534eB061c08e9643D
+   > block number:        6205555
+   > block timestamp:     1565981220
    > account:             0xE5CDaa796A8AA9009FEBA23395f5FC083e462283
-   > balance:             2.216806307
-   > gas used:            1940949
+   > balance:             5.323210302
+   > gas used:            1710141
    > gas price:           20 gwei
    > value sent:          0 ETH
-   > total cost:          0.03881898 ETH
+   > total cost:          0.03420282 ETH
 
    Pausing for 2 confirmations...
    ------------------------------
-   > confirmation number: 2 (block: 5931220)
+   > confirmation number: 1 (block: 6205556)
+   > confirmation number: 2 (block: 6205557)
+
+   Deploying 'AuctionsEscrow'
+   --------------------------
+   > transaction hash:    0xca7cf70da6c0e75c976d2be37226adc8117f7f4c23b0c6018dd482627c779280
+   > Blocks: 1            Seconds: 52
+   > contract address:    0xE80496F324586F737aF9350AbB3be02cc6DB020e
+   > block number:        6205559
+   > block timestamp:     1565981268
+   > account:             0xE5CDaa796A8AA9009FEBA23395f5FC083e462283
+   > balance:             5.303057682
+   > gas used:            1007631
+   > gas price:           20 gwei
+   > value sent:          0 ETH
+   > total cost:          0.02015262 ETH
+
+   Pausing for 2 confirmations...
+   ------------------------------
+   > confirmation number: 2 (block: 6205560)
 
    > Saving migration to chain.
    > Saving artifacts
    -------------------------------------
-   > Total cost:          0.21756462 ETH
+   > Total cost:          0.32494404 ETH
 
 
 Summary
 =======
-> Total deployments:   7
-> Final cost:          0.22279248 ETH
+> Total deployments:   9
+> Final cost:          0.32494404 ETH

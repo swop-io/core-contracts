@@ -97,36 +97,4 @@ contract SwopManager is Contained {
 
     }
 
-    /**
-        @dev Enables seller to pre-defined the buyer
-        @param refNo unique reference number
-        @param buyer address of the buyer
-        @param r signature part
-        @param s signature part
-        @param v signature part
-     */
-    function directBuy
-    (
-        bytes32 refNo,
-        address buyer,
-        bytes32 r,
-        bytes32 s,
-        uint8 v
-    )
-    external
-    payable
-    onlyContained
-    {
-        bytes32 messageHash = keccak256(abi.encodePacked(refNo, buyer));
-
-        bytes32 messageHash2 = keccak256(abi.encodePacked(
-            "\x19Ethereum Signed Message:\n32", messageHash
-        ));
-
-        address seller = ticketDB.getTicketSeller(refNo);
-        require(ecrecover(messageHash2, v, r, s) == seller, "bad signature");
-
-        this.buyTicket.value(msg.value)(refNo, buyer);
-    }
-
 }

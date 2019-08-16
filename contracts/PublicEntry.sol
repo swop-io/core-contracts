@@ -24,18 +24,6 @@ contract PublicEntry is BaseContainer, Guard {
        SwopManager(getAddressOfSwopManager()).completeTransaction(refNo);
     }
 
-    function directBuy
-    (
-        bytes32 refNo,
-        bytes32 r,
-        bytes32 s,
-        uint8 v
-    )
-    external payable
-    {
-        SwopManager(getAddressOfSwopManager()).directBuy.value(msg.value)(refNo, msg.sender, r, s, v);
-    }
-
     function deposit(bytes32 refNo) external payable {
         Auctions(getAddressOfAuctions()).deposit.value(msg.value)(refNo, msg.sender);
     }

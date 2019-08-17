@@ -2,6 +2,14 @@
 
 Smart Contracts for [Swop](https://swop-v1.surge.sh) dApp 
 
+## Smart Contract Design
+
+#### Upgradeable Pattern
+![](https://user-images.githubusercontent.com/47552061/63214293-84869600-c0e4-11e9-9bac-72b666d14574.png)
+
+#### Architecture Design
+![](https://user-images.githubusercontent.com/47552061/63214294-87818680-c0e4-11e9-8a79-a52de4be2cff.png)
+
 ## Deployments
 
 Network : Ropsten

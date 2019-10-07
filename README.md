@@ -1,6 +1,6 @@
 # core-contracts
 
-Smart Contracts for [Swop](https://swop-v1.surge.sh) dApp 
+Smart Contracts for Swop dApp - https://youtu.be/UamRRDiRd-o
 
 ## Smart Contract Design
 
